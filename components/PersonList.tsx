@@ -1,0 +1,68 @@
+import { Document, Person } from "@/types";
+import { MaterialIcons } from "@expo/vector-icons";
+import { FlatList, Linking, Pressable, StyleSheet } from "react-native";
+import { ThemedText } from "./ThemedText";
+import { ThemedView } from "./ThemedView";
+
+interface IPersonListProps {
+    person: Person;
+    closePerson?: () => void;
+}
+
+export function PersonList({
+    person,
+    closePerson
+}: IPersonListProps) {
+
+    const openWEB = (item: Document) => {
+        Linking.openURL(item.url);
+    };
+
+    return (
+        <>
+            <Pressable onPress={closePerson}>
+                <ThemedView style={styles.titleContainer}>
+                    <MaterialIcons name="chevron-left" size={28} style={styles.materialIcons} />
+                    <ThemedText>Voltar</ThemedText>
+                </ThemedView>
+            </Pressable>
+            <FlatList
+                data={person.documents}
+                style={styles.stepContainer}
+                renderItem={({ item, index }) => (
+                    <>
+                        {index === 0 && (
+                            <ThemedText type="title" style={{ margin: 12 }}>
+                                {person.name}
+                            </ThemedText>
+                        )}
+                        <Pressable onPress={() => openWEB(item)}>
+                            <ThemedView style={styles.titleContainer}>
+                                <MaterialIcons size={28} name={item.icon} style={styles.materialIcons} />
+                                <ThemedText>{item.title}</ThemedText>
+                            </ThemedView>
+                        </Pressable>
+                    </>
+                )}
+            />
+        </>
+    )
+}
+
+const styles = StyleSheet.create({
+    titleContainer: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: 8,
+        margin: 12,
+        color: '#FAFAFA'
+
+    },
+    materialIcons: {
+        color: '#FAFAFA',
+    },
+    stepContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+});
