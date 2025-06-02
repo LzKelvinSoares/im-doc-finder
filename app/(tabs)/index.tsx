@@ -2,7 +2,8 @@ import { Image } from 'expo-image';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { PersonList } from '@/components/PersonList';
+import { AddPerson } from '@/components/Person/AddPerson';
+import { PersonDocumentList } from '@/components/Person/PersonDocumentList';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { usePeople } from '@/hooks/usePeople';
@@ -32,10 +33,10 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-
+      <AddPerson />
       {
         !!openedPerson ? (
-          <PersonList
+          <PersonDocumentList
             person={openedPerson}
             closePerson={closePerson}
           />
