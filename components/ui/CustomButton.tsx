@@ -4,25 +4,30 @@ interface ICustomButtonProps {
     onPress: () => void;
     title?: string;
     style?: object;
+    textStyle?: object;
     accessibilityLabel?: string;
+    disabled?: boolean;
 }
 
-export function CustomButton({ onPress, title, style, accessibilityLabel }: ICustomButtonProps) {
+export function CustomButton({ onPress, title, style, textStyle, accessibilityLabel, disabled }: ICustomButtonProps) {
     return (
         <Pressable
-            style={[styles.button, styles.buttonClose, style]}
+            style={[styles.button, styles.buttonClose, style, disabled && { opacity: 0.5 }]}
             onPress={onPress}
-            accessibilityLabel={accessibilityLabel}>
-            <Text style={styles.textStyle}>{title}</Text>
+            accessibilityLabel={accessibilityLabel}
+            disabled={disabled}
+        >
+            <Text style={[styles.textStyle, textStyle]}>{title}</Text>
         </Pressable>
     );
 }
 
 const styles = StyleSheet.create({
     button: {
-        borderRadius: 20,
+        borderRadius: 15,
         padding: 10,
         elevation: 2,
+        cursor: 'pointer',
     },
     buttonClose: {
         backgroundColor: '#2196F3',

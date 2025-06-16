@@ -6,14 +6,12 @@ import { AddPerson } from '@/components/Person/AddPerson';
 import { PersonDocumentList } from '@/components/Person/PersonDocumentList';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { usePeople } from '@/hooks/usePeople';
+import { usePeopleContext } from '@/providers';
 import { Person } from '@/types';
 import { useState } from 'react';
 
-
-
 export default function HomeScreen() {
-  const people = usePeople();
+  const { people } = usePeopleContext();
   const [openedPerson, setOpenedPerson] = useState<Person | null>(null);
 
   const openPerson = (person: Person) => {
@@ -33,7 +31,6 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <AddPerson />
       {
         !!openedPerson ? (
           <PersonDocumentList
@@ -41,24 +38,28 @@ export default function HomeScreen() {
             closePerson={closePerson}
           />
         ) : (
-          <FlatList
-            data={people}
-            style={styles.stepContainer}
-            renderItem={({ item, index }) => (
-              <>
-                {index === 0 && (
-                  <ThemedText type="title" style={{ margin: 12 }}>
-                    Pessoas
-                  </ThemedText>
-                )}
-                <Pressable onPress={() => openPerson(item)}>
-                  <ThemedView style={styles.titleContainer}>
-                    <ThemedText>{item.name}</ThemedText>
-                  </ThemedView>
-                </Pressable>
-              </>
-            )}
-          />
+          <>
+            <AddPerson />
+
+            <FlatList
+              data={people}
+              style={styles.stepContainer}
+              renderItem={({ item, index }) => (
+                <>
+                  {index === 0 && (
+                    <ThemedText type="title" style={{ margin: 12 }}>
+                      Pessoas
+                    </ThemedText>
+                  )}
+                  <Pressable onPress={() => openPerson(item)}>
+                    <ThemedView style={styles.titleContainer}>
+                      <ThemedText>{item.name}</ThemedText>
+                    </ThemedView>
+                  </Pressable>
+                </>
+              )}
+            />
+          </>
         )
       }
 

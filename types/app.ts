@@ -8,5 +8,5 @@ export interface Document {
 export interface Person {
     id: string;
     name: string;
-    documents: Document[];
+    documents?: Document[];
 }
