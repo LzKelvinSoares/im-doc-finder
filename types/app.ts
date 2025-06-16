@@ -5,8 +5,11 @@ export interface Document {
     icon: string;
 };
 
-export interface Person {
+export interface PersonCRUD {
     id: string;
     name: string;
+}
+
+export interface Person extends PersonCRUD {
     documents?: Document[];
 }

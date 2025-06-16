@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { ProvidePeople } from '@/providers';
+import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -20,14 +21,41 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ProvidePeople>
+      <SQLiteProvider databaseName="imdoc.db" onInit={migrateDbIfNeeded}>
+        <ProvidePeople>
 
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </ProvidePeople>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </ProvidePeople>
+      </SQLiteProvider>
     </ThemeProvider>
   );
 }
+
+interface MigrationResult {
+  user_version: number;
+}
+
+async function migrateDbIfNeeded(db: SQLiteDatabase) {
+  const DATABASE_VERSION = 1;
+  let data = await db.getFirstAsync<MigrationResult | null>(
+    'PRAGMA user_version'
+  );
+  let currentDbVersion = data?.user_version ?? 0;
+  if (currentDbVersion >= DATABASE_VERSION) {
+    return;
+  }
+  if (currentDbVersion === 0) {
+    await db.execAsync(`
+        PRAGMA journal_mode = WAL;
+        CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL);
+    `);
+    await db.runAsync('INSERT INTO people (name) VALUES (?)', 'Kelvin');
+    currentDbVersion = 1;
+  }
+  await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
+}
+

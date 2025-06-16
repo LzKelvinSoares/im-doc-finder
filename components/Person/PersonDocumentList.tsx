@@ -26,16 +26,15 @@ export function PersonDocumentList({
                     <ThemedText>Voltar</ThemedText>
                 </ThemedView>
             </Pressable>
+
+            <ThemedText type="title" style={{ marginLeft: 12 }}>
+                {person.name}
+            </ThemedText>
             <FlatList
                 data={person.documents}
                 style={styles.stepContainer}
                 renderItem={({ item, index }) => (
                     <>
-                        {index === 0 && (
-                            <ThemedText type="title" style={{ margin: 12 }}>
-                                {person.name}
-                            </ThemedText>
-                        )}
                         <Pressable onPress={() => openWEB(item)}>
                             <ThemedView style={styles.titleContainer}>
                                 <MaterialIcons size={28} name={item.icon} style={styles.materialIcons} />

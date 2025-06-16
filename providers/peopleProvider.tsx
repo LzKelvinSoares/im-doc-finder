@@ -1,6 +1,6 @@
+import { useSQLiteCRUD } from '@/hooks/useSQLiteCRUD';
 import { Person } from '@/types';
-import { createContext, PropsWithChildren, useCallback, useContext, useState } from 'react';
-import SessionStorage from 'react-native-session-storage';
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
 
 interface IPeopleContext {
     people?: Person[];
@@ -12,14 +12,28 @@ export const peopleContext = createContext<IPeopleContext>({
 });
 
 export function ProvidePeople({ children }: PropsWithChildren<{}>) {
-    const sessionPeople = SessionStorage.getItem('@people') as Person[];
-    const [people, setPeople] = useState<Person[]>(sessionPeople || []);
-    const value = SessionStorage.getItem('@storage_key');
+    const crud = useSQLiteCRUD('people');
+    const [people, setPeople] = useState<Person[]>([]);
 
-    const addPerson = useCallback((person: Person) => {
+    useEffect(() => {
+        async function setup() {
+            const result = await crud.getAllAsync<Person>();
+            const resultWithDocuments = result.map(person => ({
+                ...person,
+                documents: [],
+            }));
+            setPeople(resultWithDocuments);
+        }
+        setup();
+    }, []);
+
+    const addPerson = useCallback(async (person: Person) => {
+        await crud.insertAsync(person, ['documents']);
         setPeople(current => {
-            const newPeople = [...current, person];
-            SessionStorage.setItem('@people', newPeople);
+            const newPeople = [...current, {
+                ...person,
+                documents: [],
+            }];
             return newPeople;
         });
     }, [setPeople]);
@@ -27,7 +41,7 @@ export function ProvidePeople({ children }: PropsWithChildren<{}>) {
         <peopleContext.Provider
             value={{
                 people,
-                addPerson,
+                addPerson
             }}
         >
             {children}
