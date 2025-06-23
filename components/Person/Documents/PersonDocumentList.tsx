@@ -1,8 +1,9 @@
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { Document, Person } from "@/types";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FlatList, Linking, Pressable, StyleSheet } from "react-native";
-import { ThemedText } from "../ThemedText";
-import { ThemedView } from "../ThemedView";
+import { AddDocument } from "./AddDocument";
 
 interface IPersonDocumentListProps {
     person: Person;
@@ -28,8 +29,9 @@ export function PersonDocumentList({
             </Pressable>
 
             <ThemedText type="title" style={{ marginLeft: 12 }}>
-                {person.name}
+                {person.name} | Documentos
             </ThemedText>
+            <AddDocument person={person} />
             <FlatList
                 data={person.documents}
                 style={styles.stepContainer}

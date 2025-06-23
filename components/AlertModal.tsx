@@ -27,8 +27,6 @@ export function AlertModal({
     )
 }
 
-
-
 const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center',

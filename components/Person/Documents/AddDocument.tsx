@@ -1,25 +1,33 @@
+import { CustomButton } from "@/components/ui/CustomButton";
+import { Person } from "@/types";
 import { useState } from "react";
-import { CustomButton } from "../ui/CustomButton";
-import { AddPersonModal } from "./AddPersonModal";
+import { AddDocumentModal } from "./AddDocumentModal";
 
-export function AddPerson() {
+interface AddDocumentProps {
+    person: Person;
+}
+
+export function AddDocument({
+    person
+}: AddDocumentProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openAddPerson = () => {
+    const openAddDocument = () => {
         setIsModalOpen(true);
     };
     return (
         <>
             <CustomButton
-                onPress={openAddPerson}
-                title="Adicionar Pessoa"
+                onPress={openAddDocument}
+                title="Adicionar Documento"
                 accessibilityLabel="Open Add Person Modal"
             />
             {
                 isModalOpen && (
-                    <AddPersonModal
+                    <AddDocumentModal
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
+                        person={person}
                     />
                 )
             }

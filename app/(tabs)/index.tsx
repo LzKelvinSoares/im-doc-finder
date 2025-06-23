@@ -4,7 +4,7 @@ import { FlatList, Pressable, StyleSheet } from 'react-native';
 import { AlertModal } from '@/components/AlertModal';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { AddPerson } from '@/components/Person/AddPerson';
-import { PersonDocumentList } from '@/components/Person/PersonDocumentList';
+import { PersonDocumentList } from '@/components/Person/Documents/PersonDocumentList';
 import { SimpleModal } from '@/components/SimpleModal';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
