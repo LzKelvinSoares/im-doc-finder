@@ -4,16 +4,20 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 
 interface IPeopleContext {
     people?: Person[];
+    loading?: boolean;
     addPerson: (person: Person) => void;
+    deletePerson: (person: Person) => void;
 }
 
 export const peopleContext = createContext<IPeopleContext>({
     addPerson: () => { },
+    deletePerson: () => { },
 });
 
 export function ProvidePeople({ children }: PropsWithChildren<{}>) {
     const crud = useSQLiteCRUD('people');
     const [people, setPeople] = useState<Person[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         async function setup() {
@@ -28,6 +32,7 @@ export function ProvidePeople({ children }: PropsWithChildren<{}>) {
     }, []);
 
     const addPerson = useCallback(async (person: Person) => {
+        setLoading(true);
         await crud.insertAsync(person, ['documents']);
         setPeople(current => {
             const newPeople = [...current, {
@@ -36,12 +41,26 @@ export function ProvidePeople({ children }: PropsWithChildren<{}>) {
             }];
             return newPeople;
         });
+        setLoading(false);
     }, [setPeople]);
+
+    const deletePerson = useCallback(async (person: Person) => {
+        setLoading(true);
+        await crud.deleteAsync(person.id);
+        setPeople(current => {
+            const newPeople = [...current.filter(p => p.id !== person.id)];
+            return newPeople;
+        });
+        setLoading(false);
+    }, [setPeople]);
+
     return (
         <peopleContext.Provider
             value={{
                 people,
-                addPerson
+                loading,
+                addPerson,
+                deletePerson
             }}
         >
             {children}

@@ -4,15 +4,19 @@ import { FlatList, Pressable, StyleSheet } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { AddPerson } from '@/components/Person/AddPerson';
 import { PersonDocumentList } from '@/components/Person/PersonDocumentList';
+import { SimpleModal } from '@/components/SimpleModal';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { usePeopleContext } from '@/providers';
 import { Person } from '@/types';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 
 export default function HomeScreen() {
-  const { people } = usePeopleContext();
+  const { people, deletePerson, loading } = usePeopleContext();
   const [openedPerson, setOpenedPerson] = useState<Person | null>(null);
+  const [deletingPerson, setDeletingPerson] = useState<Person | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   const openPerson = (person: Person) => {
     setOpenedPerson(person);
@@ -20,6 +24,19 @@ export default function HomeScreen() {
 
   const closePerson = () => {
     setOpenedPerson(null);
+  };
+
+  const openDeletePerson = (person: Person) => {
+    setDeletingPerson(person);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deletingPerson) {
+      await deletePerson(deletingPerson);
+      setDeletingPerson(null);
+      setDeleteModalOpen(false);
+    }
   };
 
   return (
@@ -51,15 +68,32 @@ export default function HomeScreen() {
                       Pessoas
                     </ThemedText>
                   )}
-                  <Pressable onPress={() => openPerson(item)}>
-                    <ThemedView style={styles.titleContainer}>
+                  <ThemedView style={styles.titleContainer}>
+                    <Pressable onPress={() => openPerson(item)}>
                       <ThemedText>{item.name}</ThemedText>
-                    </ThemedView>
-                  </Pressable>
+                    </Pressable>
+                    <Pressable onPress={() => openDeletePerson(item)}>
+                      <MaterialIcons size={28} name={'delete'} style={styles.materialIcons} />
+                    </Pressable>
+                  </ThemedView>
                 </>
               )}
             />
           </>
+        )
+      }
+
+      {
+        deleteModalOpen && deletingPerson && (
+          <SimpleModal
+            title="Excluir Pessoa"
+            isOpen={deleteModalOpen}
+            onClose={() => setDeleteModalOpen(false)}
+            confirm={handleConfirmDelete}
+            loading={loading}
+          >
+            Você tem certeza que deseja excluir {deletingPerson?.name}?
+          </SimpleModal>
         )
       }
 
@@ -73,8 +107,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: 8,
     margin: 12,
-    color: '#FAFAFA'
-
+    color: '#FAFAFA',
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   materialIcons: {
     color: '#FAFAFA',
