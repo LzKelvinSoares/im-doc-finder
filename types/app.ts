@@ -6,7 +6,7 @@ export interface Document {
 };
 
 export interface PersonCRUD {
-    id: string;
+    id: string | number;
     name: string;
 }
 

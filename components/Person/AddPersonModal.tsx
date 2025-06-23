@@ -1,11 +1,9 @@
 import { usePeopleContext } from "@/providers";
 import { Person } from "@/types";
 import { useState } from "react";
-import { Modal, StyleSheet, TextInput, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, TextInput, View } from "react-native";
 import { v4 as uuid } from 'uuid';
-import { ThemedText } from "../ThemedText";
-import { CustomButton } from "../ui/CustomButton";
+import { SimpleModal } from "../SimpleModal";
 
 interface IAddPersonModalProps {
     onClose: () => void;
@@ -31,45 +29,21 @@ export function AddPersonModal({
     };
 
     return (
-        <SafeAreaProvider>
-            <SafeAreaView style={styles.centeredView}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={isOpen}
-                    onRequestClose={onClose}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <View style={styles.headerContainer}>
-                                <ThemedText type="title" darkColor="#363636">
-                                    Nova Pessoa
-                                </ThemedText>
-                            </View>
-                            <View style={styles.contentContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={onChangeText}
-                                    value={text}
-                                />
-                            </View>
-                            <View style={styles.actionButtonContainer}>
-                                <CustomButton
-                                    onPress={onClose}
-                                    title="Fechar"
-                                    style={{ backgroundColor: '#FFFFFF', border: '1px solid' }}
-                                    textStyle={{ color: '#363636' }}
-                                />
-                                <CustomButton
-                                    onPress={submitPerson}
-                                    title="Salvar"
-                                    disabled={!text}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
-            </SafeAreaView>
-        </SafeAreaProvider>
+        <SimpleModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title="Nova Pessoa"
+            confirm={submitPerson}
+            loading={false}
+        >
+            <View style={styles.contentContainer}>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={onChangeText}
+                    value={text}
+                />
+            </View>
+        </SimpleModal>
     );
 }
 

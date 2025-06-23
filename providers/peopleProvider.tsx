@@ -5,19 +5,23 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 interface IPeopleContext {
     people?: Person[];
     loading?: boolean;
+    alertTextContent?: string | null;
     addPerson: (person: Person) => void;
     deletePerson: (person: Person) => void;
+    setAlertTextContent: (text: string | null) => void;
 }
 
 export const peopleContext = createContext<IPeopleContext>({
     addPerson: () => { },
     deletePerson: () => { },
+    setAlertTextContent: () => { },
 });
 
 export function ProvidePeople({ children }: PropsWithChildren<{}>) {
     const crud = useSQLiteCRUD('people');
     const [people, setPeople] = useState<Person[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [alertTextContent, setAlertTextContent] = useState<string | null>(null);
 
     useEffect(() => {
         async function setup() {
@@ -33,25 +37,28 @@ export function ProvidePeople({ children }: PropsWithChildren<{}>) {
 
     const addPerson = useCallback(async (person: Person) => {
         setLoading(true);
-        await crud.insertAsync(person, ['documents']);
+        const id = await crud.insertAsync(person, ['documents']);
         setPeople(current => {
             const newPeople = [...current, {
                 ...person,
+                id,
                 documents: [],
             }];
             return newPeople;
         });
         setLoading(false);
+        setAlertTextContent(`${person.name} foi adicionado(a) com sucesso!`);
     }, [setPeople]);
 
     const deletePerson = useCallback(async (person: Person) => {
         setLoading(true);
-        await crud.deleteAsync(person.id);
+        await crud.deleteAsync(person.id.toString());
         setPeople(current => {
             const newPeople = [...current.filter(p => p.id !== person.id)];
             return newPeople;
         });
         setLoading(false);
+        setAlertTextContent(`${person.name} foi removido(a) com sucesso!`);
     }, [setPeople]);
 
     return (
@@ -59,6 +66,8 @@ export function ProvidePeople({ children }: PropsWithChildren<{}>) {
             value={{
                 people,
                 loading,
+                alertTextContent,
+                setAlertTextContent,
                 addPerson,
                 deletePerson
             }}

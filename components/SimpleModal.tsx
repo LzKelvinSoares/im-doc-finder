@@ -32,14 +32,22 @@ export function SimpleModal({
                         <ThemedText type="title" darkColor="#363636">
                             {title}
                         </ThemedText>
-                        <ThemedText type="default" style={styles.modalText} darkColor="#363636">
+                        <View style={styles.contentContainer}>
                             {children}
-                        </ThemedText>
-                        <View style={styles.actionButtonContainer}>
+                        </View>
+                        <View style={{
+                            ...styles.actionButtonContainer,
+                            ...(!confirm && {
+                                justifyContent: 'center'
+                            })
+                        }}>
                             <CustomButton
                                 onPress={onClose}
                                 title="Fechar"
-                                style={{ backgroundColor: '#FFFFFF', border: '1px solid' }}
+                                style={{
+                                    backgroundColor: '#FFFFFF',
+                                    border: '1px solid',
+                                }}
                                 textStyle={{ color: '#363636' }}
                                 disabled={loading}
                             />
@@ -85,18 +93,14 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-    modalText: {
-        marginTop: 15,
-        marginBottom: 25,
-        textAlign: 'center',
-    },
     headerContainer: {
         width: '100%',
         marginBottom: 20,
     },
     contentContainer: {
         width: '100%',
-        marginBottom: 20,
+        marginTop: 15,
+        marginBottom: 25,
     },
     actionButtonContainer: {
         display: 'flex',

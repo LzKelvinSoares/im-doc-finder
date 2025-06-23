@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
 
+import { AlertModal } from '@/components/AlertModal';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { AddPerson } from '@/components/Person/AddPerson';
 import { PersonDocumentList } from '@/components/Person/PersonDocumentList';
@@ -13,7 +14,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 
 export default function HomeScreen() {
-  const { people, deletePerson, loading } = usePeopleContext();
+  const {
+    people,
+    deletePerson,
+    loading,
+    alertTextContent,
+    setAlertTextContent
+  } = usePeopleContext();
   const [openedPerson, setOpenedPerson] = useState<Person | null>(null);
   const [deletingPerson, setDeletingPerson] = useState<Person | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
@@ -92,9 +99,19 @@ export default function HomeScreen() {
             confirm={handleConfirmDelete}
             loading={loading}
           >
-            Você tem certeza que deseja excluir {deletingPerson?.name}?
+            <ThemedText type='default' style={styles.modalText}>
+              Você tem certeza que deseja excluir {deletingPerson?.name}?
+            </ThemedText>
           </SimpleModal>
         )
+      }
+      {
+        !!alertTextContent &&
+        <AlertModal
+          isOpen={!!alertTextContent}
+          onClose={() => setAlertTextContent(null)}
+          textContent={alertTextContent}
+        />
       }
 
     </ParallaxScrollView>
@@ -124,5 +141,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  modalText: {
+    textAlign: 'center',
+    color: '#363636'
   },
 });

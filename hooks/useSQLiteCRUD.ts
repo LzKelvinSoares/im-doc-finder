@@ -7,14 +7,15 @@ export function useSQLiteCRUD(tableName: string) {
         return await db.getAllAsync<T>(`SELECT * FROM ${tableName}`);
     };
 
-    const insertAsync = async <T>(item: T, excludeFields: string[]): Promise<void> => {
+    const insertAsync = async <T>(item: T, excludeFields: string[]): Promise<number> => {
         const keys = Object.keys(item as unknown as Object).filter(key => key !== 'id' &&
             !excludeFields.includes(key));
         const values = keys.map(key => typeof (item as any)[key] === 'string' ? `'${(item as any)[key]}'` : (item as any)[key]);
         const keyPlaceholders = keys.join(', ');
         const valuesPlaceholders = values.join(', ');
         const query = `INSERT INTO ${tableName} (${keyPlaceholders}) VALUES (${valuesPlaceholders})`;
-        await db.runAsync(query);
+        const returnData = await db.runAsync(query);
+        return returnData.lastInsertRowId;
     };
 
     const updateAsync = async <T>(id: string, field: string, value: T): Promise<void> => {
