@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.lzkelvinsoares.imdocfinder"
     },
     "web": {
       "bundler": "metro",
@@ -53,6 +54,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "bffb2d5d-40a7-448d-85c8-2bac45b7c493"
+      }
     }
   }
 }
