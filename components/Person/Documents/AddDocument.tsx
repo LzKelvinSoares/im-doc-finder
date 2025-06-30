@@ -1,15 +1,8 @@
 import { CustomButton } from "@/components/ui/CustomButton";
-import { Person } from "@/types";
 import { useState } from "react";
 import { AddDocumentModal } from "./AddDocumentModal";
 
-interface AddDocumentProps {
-    person: Person;
-}
-
-export function AddDocument({
-    person
-}: AddDocumentProps) {
+export function AddDocument() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openAddDocument = () => {
@@ -27,7 +20,6 @@ export function AddDocument({
                     <AddDocumentModal
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
-                        person={person}
                     />
                 )
             }

@@ -52,6 +52,7 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
     await db.execAsync(`
         PRAGMA journal_mode = WAL;
         CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL);
+        CREATE TABLE IF NOT EXISTS documents (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, url TEXT NOT NULL, icon TEXT NOT NULL, personId INTEGER NOT NULL, FOREIGN KEY (personId) REFERENCES people(id) ON DELETE CASCADE);
     `);
     await db.runAsync('INSERT INTO people (name) VALUES (?)', 'Kelvin');
     currentDbVersion = 1;

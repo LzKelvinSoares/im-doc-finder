@@ -1,8 +1,12 @@
 export interface Document {
-    id: string;
+    id: string | number;
     title: string;
     url: string;
     icon: string;
+};
+
+export interface DocumentCRUD extends Document {
+    personId: string | number;
 };
 
 export interface PersonCRUD {

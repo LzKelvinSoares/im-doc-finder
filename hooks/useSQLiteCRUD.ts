@@ -7,6 +7,10 @@ export function useSQLiteCRUD(tableName: string) {
         return await db.getAllAsync<T>(`SELECT * FROM ${tableName}`);
     };
 
+    const getAllByFieldNameAsync = async <T>(fieldName: string, id: string): Promise<T[]> => {
+        return await db.getAllAsync<T>(`SELECT * FROM ${tableName} WHERE ${fieldName} = ${id}`);
+    };
+
     const insertAsync = async <T>(item: T, excludeFields: string[]): Promise<number> => {
         const keys = Object.keys(item as unknown as Object).filter(key => key !== 'id' &&
             !excludeFields.includes(key));
@@ -28,6 +32,7 @@ export function useSQLiteCRUD(tableName: string) {
 
     return {
         getAllAsync,
+        getAllByFieldNameAsync,
         insertAsync,
         updateAsync,
         deleteAsync,

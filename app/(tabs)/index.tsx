@@ -8,7 +8,7 @@ import { PersonDocumentList } from '@/components/Person/Documents/PersonDocument
 import { SimpleModal } from '@/components/SimpleModal';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { usePeopleContext } from '@/providers';
+import { ProvideDocument, usePeopleContext } from '@/providers';
 import { Person } from '@/types';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
@@ -57,10 +57,14 @@ export default function HomeScreen() {
       }>
       {
         !!openedPerson ? (
-          <PersonDocumentList
-            person={openedPerson}
-            closePerson={closePerson}
-          />
+
+          <ProvideDocument personId={openedPerson.id.toString()}>
+            <PersonDocumentList
+              person={openedPerson}
+              closePerson={closePerson}
+            />
+          </ProvideDocument>
+
         ) : (
           <>
             <AddPerson />

@@ -1,6 +1,7 @@
 import { SimpleModal } from "@/components/SimpleModal";
 import { ThemedText } from "@/components/ThemedText";
-import { Document, Person } from "@/types";
+import { useDocumentContext } from "@/providers";
+import { Document } from "@/types";
 import { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { v4 as uuid } from 'uuid';
@@ -8,27 +9,27 @@ import { v4 as uuid } from 'uuid';
 interface IAddDocumentModalProps {
     onClose: () => void;
     isOpen: boolean;
-    person?: Person;
 }
 
 export function AddDocumentModal({
     onClose,
     isOpen,
-    person
 }: IAddDocumentModalProps) {
-    const [text, onChangeText] = useState('');
+    const [title, onChangeTitle] = useState('');
+    const [icon, onChangeIcon] = useState('');
     const [url, onChangeUrl] = useState('');
+
+    const { addDocument } = useDocumentContext();
 
     const submitDocument = () => {
         const newDocument: Document = {
             id: uuid(),
-            icon: '',
-            title: text,
+            icon,
+            title,
             url
         };
 
-        // addPerson(newPerson);
-        console.log(person, newDocument);
+        addDocument(newDocument);
         onClose();
     };
 
@@ -45,8 +46,16 @@ export function AddDocumentModal({
                     <ThemedText style={{ color: '#363636' }}>Nome: </ThemedText>
                     <TextInput
                         style={styles.input}
-                        onChangeText={onChangeText}
-                        value={text}
+                        onChangeText={onChangeTitle}
+                        value={title}
+                    />
+                </View>
+                <View style={styles.contentContainer}>
+                    <ThemedText style={{ color: '#363636' }}>Icon: </ThemedText>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={onChangeIcon}
+                        value={icon}
                     />
                 </View>
                 <View style={styles.contentContainer}>
