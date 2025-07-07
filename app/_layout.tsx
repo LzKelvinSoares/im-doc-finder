@@ -23,9 +23,9 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <SQLiteProvider databaseName="imdoc.db" onInit={migrateDbIfNeeded}>
         <ProvidePeople>
-
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="users/[id]" />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style="auto" />
@@ -59,4 +59,3 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
   }
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
-

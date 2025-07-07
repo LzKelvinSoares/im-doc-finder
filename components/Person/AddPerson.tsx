@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useControlModalByUrl } from "@/hooks/useControlModalByUrl";
 import { CustomButton } from "../ui/CustomButton";
 import { AddPersonModal } from "./AddPersonModal";
 
 export function AddPerson() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const {
+        isModalOpen,
+        openModal: openAddPerson,
+        closeModal: closeAddPerson
+    } = useControlModalByUrl({
+        modalName: 'add-person'
+    });
 
-    const openAddPerson = () => {
-        setIsModalOpen(true);
-    };
     return (
         <>
             <CustomButton
@@ -19,7 +22,7 @@ export function AddPerson() {
                 isModalOpen && (
                     <AddPersonModal
                         isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
+                        onClose={closeAddPerson}
                     />
                 )
             }

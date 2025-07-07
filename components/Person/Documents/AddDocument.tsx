@@ -1,13 +1,16 @@
 import { CustomButton } from "@/components/ui/CustomButton";
-import { useState } from "react";
+import { useControlModalByUrl } from "@/hooks/useControlModalByUrl";
 import { AddDocumentModal } from "./AddDocumentModal";
 
 export function AddDocument() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const {
+        isModalOpen,
+        openModal: openAddDocument,
+        closeModal: closeAddDocument
+    } = useControlModalByUrl({
+        modalName: 'add-document'
+    });
 
-    const openAddDocument = () => {
-        setIsModalOpen(true);
-    };
     return (
         <>
             <CustomButton
@@ -19,7 +22,7 @@ export function AddDocument() {
                 isModalOpen && (
                     <AddDocumentModal
                         isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
+                        onClose={closeAddDocument}
                     />
                 )
             }

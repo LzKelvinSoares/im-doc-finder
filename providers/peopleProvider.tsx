@@ -6,6 +6,7 @@ interface IPeopleContext {
     people?: Person[];
     loading?: boolean;
     alertTextContent?: string | null;
+    getById: (id: string) => Promise<Person> | undefined;
     addPerson: (person: Person) => void;
     deletePerson: (person: Person) => void;
     setAlertTextContent: (text: string | null) => void;
@@ -14,6 +15,7 @@ interface IPeopleContext {
 export const peopleContext = createContext<IPeopleContext>({
     addPerson: () => { },
     deletePerson: () => { },
+    getById: () => undefined,
     setAlertTextContent: () => { },
 });
 
@@ -61,6 +63,11 @@ export function ProvidePeople({ children }: PropsWithChildren<{}>) {
         setAlertTextContent(`${person.name} foi removido(a) com sucesso!`);
     }, [setPeople]);
 
+    const getById = useCallback(async (id: string) => {
+        const person = await crud.getAllByFieldNameAsync<Person>('id', id);
+        return person[0];
+    }, [crud]);
+
     return (
         <peopleContext.Provider
             value={{
@@ -69,7 +76,8 @@ export function ProvidePeople({ children }: PropsWithChildren<{}>) {
                 alertTextContent,
                 setAlertTextContent,
                 addPerson,
-                deletePerson
+                deletePerson,
+                getById
             }}
         >
             {children}
