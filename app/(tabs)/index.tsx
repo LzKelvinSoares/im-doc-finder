@@ -11,6 +11,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { ProvideDocument, usePeopleContext } from '@/providers';
 import { Person } from '@/types';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useSQLiteContext } from 'expo-sqlite';
 import { useState } from 'react';
 
 export default function HomeScreen() {
@@ -24,6 +25,7 @@ export default function HomeScreen() {
   const [openedPerson, setOpenedPerson] = useState<Person | null>(null);
   const [deletingPerson, setDeletingPerson] = useState<Person | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const db = useSQLiteContext();
 
   const openPerson = (person: Person) => {
     setOpenedPerson(person);
@@ -48,10 +50,10 @@ export default function HomeScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: '#A1CEDC', dark: '#000000' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={require('@/assets/images/splash-icon.png')}
           style={styles.reactLogo}
         />
       }>
@@ -140,11 +142,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
+    height: '100%',
+    width: '15%',
     left: 0,
-    position: 'absolute',
+    bottom: 0,
+    margin: 'auto'
   },
   modalText: {
     textAlign: 'center',

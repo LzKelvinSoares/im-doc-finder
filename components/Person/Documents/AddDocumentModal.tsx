@@ -4,7 +4,7 @@ import { useDocumentContext } from "@/providers";
 import { Document } from "@/types";
 import { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import { v4 as uuid } from 'uuid';
+import uuid from 'react-native-uuid';
 
 interface IAddDocumentModalProps {
     onClose: () => void;
@@ -23,7 +23,7 @@ export function AddDocumentModal({
 
     const submitDocument = () => {
         const newDocument: Document = {
-            id: uuid(),
+            id: uuid.v4(),
             icon,
             title,
             url

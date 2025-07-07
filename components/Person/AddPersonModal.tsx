@@ -2,8 +2,9 @@ import { usePeopleContext } from "@/providers";
 import { Person } from "@/types";
 import { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import { v4 as uuid } from 'uuid';
+import uuid from 'react-native-uuid';
 import { SimpleModal } from "../SimpleModal";
+'react-native-uuid';
 
 interface IAddPersonModalProps {
     onClose: () => void;
@@ -19,7 +20,7 @@ export function AddPersonModal({
 
     const submitPerson = () => {
         const newPerson: Person = {
-            id: uuid(),
+            id: uuid.v4(),
             name: text,
             documents: []
         };

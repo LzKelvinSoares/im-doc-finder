@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         cursor: 'pointer',
     },
     buttonClose: {
-        backgroundColor: '#2196F3',
+        backgroundColor: '#19C159',
     },
     textStyle: {
         color: 'white',

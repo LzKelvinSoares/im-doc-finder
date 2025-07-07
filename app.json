@@ -2,7 +2,7 @@
   "expo": {
     "name": "im-doc-finder",
     "slug": "im-doc-finder",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "imdocfinder",
