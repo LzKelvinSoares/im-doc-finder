@@ -5,6 +5,7 @@ import { Document } from "@/types";
 import { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import uuid from 'react-native-uuid';
+import { AddDocumentIconDropdown } from "./AddDocumentIconDropdown";
 
 interface IAddDocumentModalProps {
     onClose: () => void;
@@ -52,11 +53,10 @@ export function AddDocumentModal({
                 </View>
                 <View style={styles.contentContainer}>
                     <ThemedText style={{ color: '#363636' }}>Icon: </ThemedText>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={onChangeIcon}
-                        value={icon}
+                    <AddDocumentIconDropdown
+                        onChange={onChangeIcon}
                     />
+
                 </View>
                 <View style={styles.contentContainer}>
                     <ThemedText style={{ color: '#363636' }}>URL: </ThemedText>

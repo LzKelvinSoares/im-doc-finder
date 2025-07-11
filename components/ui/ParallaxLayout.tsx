@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, Platform, StyleSheet } from "react-native";
 import ParallaxScrollView from "../ParallaxScrollView";
 
 export default function ParallaxLayout({
@@ -22,7 +22,7 @@ export default function ParallaxLayout({
 const styles = StyleSheet.create({
     reactLogo: {
         height: '100%',
-        width: '15%',
+        width: Platform.OS === 'web' ? '15%' : '50%',
         left: 0,
         bottom: 0,
         margin: 'auto'
