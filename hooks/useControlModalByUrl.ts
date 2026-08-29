@@ -1,4 +1,4 @@
-import { ExternalPathString, Href, useGlobalSearchParams, usePathname, useRouter } from "expo-router";
+import { ExternalPathString, Href, useGlobalSearchParams, useNavigation, usePathname, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 
 interface IUseControlModalByUrlProps {
@@ -10,6 +10,7 @@ export function useControlModalByUrl({
 }: IUseControlModalByUrlProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
+    const navigation = useNavigation();
     const pathname = usePathname();
     const { modal } = useGlobalSearchParams();
     useEffect(() => {
@@ -29,6 +30,7 @@ export function useControlModalByUrl({
     };
 
     const closeModal = () => {
+        navigation.goBack();
         router.push(buildPathName());
     };
 
